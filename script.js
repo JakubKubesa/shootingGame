@@ -1,6 +1,7 @@
 const hraciPole = document.getElementById('hraci-pole');
 const hrac = document.getElementById('hrac');
 const bullet = document.getElementById('bullet');
+const balon = document.getElementById('balonek');
 
 let hracX = 275;
 let hracY = 600;
@@ -44,7 +45,7 @@ function pohyb(event) {
     hrac.style.left = hracX + 'px';
     hrac.style.top = hracY + 'px';
     
-    zkontrolujKolizi();
+    
 }
 
 function pohybBullet() {
@@ -59,36 +60,17 @@ function pohybBullet() {
         } else {
             // Pokračujeme v pohybu střely.
             requestAnimationFrame(pohybBullet);
+            checkCollision();
         }
     }
 }
 
-window.addEventListener('keydown', pohyb);
 
-
-
-
-
-
-
-
-
-
-
-
-// Funkce pro kontrolu kolize.
-/*
-function zkontrolujKolizi() {
-    // Vypočtěte vzdálenost mezi středem hráče a středem předmětu.
-    const hracStredX = hracX + hrac.clientWidth / 2;
-    const hracStredY = hracY + hrac.clientHeight / 2;
-    const predmetStredX = predmetX + predmet.clientWidth / 2;
-    const predmetStredY = predmetY + predmet.clientHeight / 2;
-
-    const vzdalenost = Math.sqrt(Math.pow(hracStredX - predmetStredX, 2) + Math.pow(hracStredY - predmetStredY, 2));
-    if (vzdalenost < (hrac.clientWidth / 2 + predmet.clientWidth / 2)) {
-        // Nastane kolize, takže skryjte předmět.
-        predmet.style.display = 'none';
+function checkCollision(){
+    if (bulletY == 80 && bulletX >= 275 && bulletX <= 343) {
+        balon.style.visibility = 'hidden';
     }
 }
-*/
+
+
+window.addEventListener('keydown', pohyb);
