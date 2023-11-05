@@ -1,12 +1,12 @@
-const hraciPole = document.getElementById('hraci-pole');
-const hrac = document.getElementById('hrac');
+const playing_field = document.getElementById('playing-field');
+const player = document.getElementById('player');
 const bullet = document.getElementById('bullet');
 const balloon = document.getElementById('balloon');
 const live = document.getElementById('live');
 const score = document.getElementById('score');
 
-let hracX = 500;
-let hracY = 600;
+let playerX = 500;
+let playerY = 600;
 let bulletX;
 let bulletY;
 
@@ -16,29 +16,27 @@ let ScoreCounter=0;
 let bulletVisible = false;
 let bulletSpeed = 5;
 let balloonX = 0;
-let balloonSpeed = 2;
+let balloonSpeed = 1;
 
 
-
-
-requestAnimationFrame(pohybBalloon);
+requestAnimationFrame(BalloonMoving);
 
 function pohyb(event) {
-    bulletX = hracX + 30;
+    bulletX = playerX + 30;
     
 
     switch (event.key) {
         case 'a':
-            hracX -= 10;
+            playerX -= 10;
             break;
         case 'd':
-            hracX += 10;
+            playerX += 10;
             break;
         case 'ArrowLeft':
-            hracX -= 10;
+            playerX -= 10;
             break;
         case 'ArrowRight':
-            hracX += 10;
+            playerX += 10;
             break;
         case ' ':
             if (!bulletVisible) {
@@ -47,22 +45,22 @@ function pohyb(event) {
                 bullet.style.top = bulletY + 'px';
                 bullet.style.visibility = 'visible';
                 bulletVisible = true;
-                requestAnimationFrame(pohybBullet);
+                requestAnimationFrame(BulletMoving);
             }
             break;
     }
 
-    hracX = Math.max(0, Math.min(hracX, hraciPole.clientWidth - hrac.clientWidth));
-    hracY = Math.max(0, Math.min(hracY, hraciPole.clientHeight - hrac.clientHeight));
+    playerX = Math.max(0, Math.min(playerX, playing_field.clientWidth - player.clientWidth));
+    playerY = Math.max(0, Math.min(playerY, playing_field.clientHeight - player.clientHeight));
 
-    hrac.style.left = hracX + 'px';
-    hrac.style.top = hracY + 'px';
+    player.style.left = playerX + 'px';
+    player.style.top = playerY + 'px';
     
     
 }
 
 
-function pohybBullet() {
+function BulletMoving() {
     if (bulletVisible) {
         bulletY -= bulletSpeed;
         bullet.style.top = bulletY + 'px';
@@ -71,14 +69,14 @@ function pohybBullet() {
             bullet.style.visibility = 'hidden';
             bulletVisible = false;
         } else {
-            requestAnimationFrame(pohybBullet);
+            requestAnimationFrame(BulletMoving);
             checkCollision();
         }
     }
 }
 
 
-function pohybBalloon() {
+function BalloonMoving() {
     balloonX += balloonSpeed;
     balloon.style.left = balloonX + 'px';
 
@@ -93,7 +91,7 @@ function pohybBalloon() {
         }
     }
     if (LivesCounter != 0) {
-        requestAnimationFrame(pohybBalloon);
+        requestAnimationFrame(BalloonMoving);
     }
     
 }
@@ -118,7 +116,7 @@ function checkCollision(){
             balloonSpeed = balloonSpeed + 0.15;
         }
     }
-    score.innerHTML = "Score: " + ScoreCounter;
+    score.innerHTML = "<b>Score: " + ScoreCounter + "</b>";
 }
 
 
@@ -132,9 +130,10 @@ function resetButton(){
        balloon.style.visibility = "visible"
        ScoreCounter = 0;
        LivesCounter = 3;
-       balloonSpeed = 2;
+       balloonSpeed = 1;
+       score.innerHTML = "<b>Score: " + ScoreCounter + "</b>";
        live.innerHTML = '<img src="live.png"><img src="live.png"><img src="live.png">';
-       requestAnimationFrame(pohybBalloon); 
+       requestAnimationFrame(BalloonMoving); 
     }
     
 }

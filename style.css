@@ -1,4 +1,4 @@
-#hraci-pole {
+#playing-field{
     width: 800px;
     height: 600px;
     border: 2px solid black;
@@ -8,7 +8,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
-#hrac {
+#player {
     width: 48px;
     height: 83px;
     position: absolute;
@@ -47,4 +47,9 @@ h1{
     position: absolute;
     left: 60%;
     top: 128px;
+}
+#reset{
+    position: absolute;
+    left: 30%;
+    top: 770px;
 }
