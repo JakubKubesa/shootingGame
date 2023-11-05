@@ -3,19 +3,22 @@ const hrac = document.getElementById('hrac');
 const bullet = document.getElementById('bullet');
 const balloon = document.getElementById('balloon');
 const live = document.getElementById('live');
+const score = document.getElementById('score');
 
 let hracX = 500;
 let hracY = 600;
 let bulletX;
 let bulletY;
 
+let LivesCounter=3;
+let ScoreCounter=0;
+
 let bulletVisible = false;
 let bulletSpeed = 5;
 let balloonX = 0;
 let balloonSpeed = 2;
 
-let LivesCounter=3;
-let ScoreCounter=0;
+
 
 
 requestAnimationFrame(pohybBalloon);
@@ -84,8 +87,8 @@ function pohybBalloon() {
         balloon.style.left = balloonX + 'px';
         LivesCounter -= 1;
         switch(LivesCounter){
-            case 2: live.innerHTML = '<img src="live.png"></img><img src="live.png"></img>'; break;
-            case 1: live.innerHTML = '<img src="live.png"></img>'; break;
+            case 2: live.innerHTML = '<img src="live.png"><img src="live.png">'; break;
+            case 1: live.innerHTML = '<img src="live.png">'; break;
             case 0: live.innerHTML = " "; gameOver(); break;
         }
     }
@@ -97,23 +100,43 @@ function pohybBalloon() {
 
 
 function checkCollision(){
-    if (bulletY == 80 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
-        balloonX = 0; ScoreCounter += 1;
+    if(LivesCounter != 0){
+        if (bulletY == 80 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
+            balloonX = 0; ScoreCounter += 1;
+            balloonSpeed = balloonSpeed + 0.15;
+        }
+        if (bulletY == 60 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
+            balloonX = 0; ScoreCounter += 1;
+            balloonSpeed = balloonSpeed + 0.15;
+        }
+        if (bulletY == 40 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
+            balloonX = 0; ScoreCounter += 1;
+            balloonSpeed = balloonSpeed + 0.15;
+        }
+        if (bulletY == 20 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
+            balloonX = 0; ScoreCounter += 1;
+            balloonSpeed = balloonSpeed + 0.15;
+        }
     }
-    if (bulletY == 60 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
-        balloonX = 0; ScoreCounter += 1;
-    }
-    if (bulletY == 40 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
-        balloonX = 0; ScoreCounter += 1;
-    }
-    if (bulletY == 20 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
-        balloonX = 0; ScoreCounter += 1;
-    }
+    score.innerHTML = "Score: " + ScoreCounter;
 }
 
 
 function gameOver(){
     balloon.style.visibility = 'hidden';
+}
+
+
+function resetButton(){
+    if(LivesCounter == 0){
+       balloon.style.visibility = "visible"
+       ScoreCounter = 0;
+       LivesCounter = 3;
+       balloonSpeed = 2;
+       live.innerHTML = '<img src="live.png"><img src="live.png"><img src="live.png">';
+       requestAnimationFrame(pohybBalloon); 
+    }
+    
 }
 
 window.addEventListener('keydown', pohyb);

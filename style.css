@@ -1,0 +1,50 @@
+#hraci-pole {
+    width: 800px;
+    height: 600px;
+    border: 2px solid black;
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#hrac {
+    width: 48px;
+    height: 83px;
+    position: absolute;
+    left: 500px;
+    top: 514px;
+    background-image: url("miniShoter.png");
+}
+#balloon {
+    width: 68px;
+    height: 91px;
+    position: absolute;
+    left: 275px;
+    top: 0px;
+    background-image: url("balon.png");
+}
+#bullet {
+    width: 12px;
+    height: 33px;
+    position: absolute;
+    left: 275px;
+    top:  200px;
+    background-image: url("bullet.png");
+    visibility: hidden;
+}
+h1{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#live{
+    position: absolute;
+    left: 30%;
+    top: 120px;
+}
+#score{
+    position: absolute;
+    left: 60%;
+    top: 128px;
+}

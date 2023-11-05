@@ -2,62 +2,19 @@
 <html>
 <head>
     <title>2D Hra</title>
-    <style>
-        #hraci-pole {
-            width: 800px;
-            height: 600px;
-            border: 2px solid black;
-            
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        #hrac {
-            width: 48px;
-            height: 83px;
-            position: absolute;
-            left: 500px;
-            top: 517px;
-            background-image: url("miniShoter.png");
-        }
-        #balloon {
-            width: 68px;
-            height: 91px;
-            position: absolute;
-            left: 275px;
-            top: 0px;
-            background-image: url("balon.png");
-        }
-        #bullet {
-            width: 12px;
-            height: 33px;
-            position: absolute;
-            left: 275px;
-            top:  200px;
-            background-image: url("bullet.png");
-            visibility: hidden;
-        }
-        h1{
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        #live{
-            position: absolute;
-            left: 30%;
-            top: 120px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
 <body>
     <h1>Baloon shooting</h1>
-    <div id="live"><img src="live.png"></img><img src="live.png"></img><img src="live.png"></img></div>
+    <div id="live"><img src="live.png"><img src="live.png"><img src="live.png"></div>
+    <div id="score">Score: 0</div>
     <div id="hraci-pole">
         <div id="hrac"></div>
         <div id="balloon"></div>
         <div id="bullet"></div>
     </div>
+    <button id="reset" onClick="resetButton()" class="btn btn-danger">Reset</button>
 
     <script src="script.js"></script>
 </body>
