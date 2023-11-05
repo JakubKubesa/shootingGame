@@ -5,6 +5,7 @@ const balloon = document.getElementById('balloon');
 const live = document.getElementById('live');
 const score = document.getElementById('score');
 
+
 let playerX = 500;
 let playerY = 600;
 let bulletX;
@@ -138,4 +139,6 @@ function resetButton(){
     
 }
 
+
 window.addEventListener('keydown', pohyb);
+

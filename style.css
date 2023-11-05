@@ -1,7 +1,12 @@
+body{
+    background-image: url("background.png");
+}
+
 #playing-field{
     width: 800px;
     height: 600px;
     border: 2px solid black;
+    background-image: url("fieldBackground.jpg");
     
     position: absolute;
     top: 50%;
@@ -13,12 +18,12 @@
     height: 83px;
     position: absolute;
     left: 500px;
-    top: 514px;
+    top: 513px;
     background-image: url("miniShoter.png");
 }
 #balloon {
     width: 68px;
-    height: 91px;
+    height: 90px;
     position: absolute;
     left: 275px;
     top: 0px;
@@ -39,9 +44,12 @@ h1{
     transform: translate(-50%, -50%);
 }
 #live{
+    border: 1px solid black;
     position: absolute;
     left: 30%;
     top: 120px;
+    width: 98px;
+    height: 32px;
 }
 #score{
     position: absolute;
