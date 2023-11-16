@@ -2,6 +2,13 @@ var config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
     scene: {
         preload: preload,
         create: create,
@@ -19,184 +26,130 @@ function preload (){
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
 }
 
-function create (){
-    this.add.image(400, 300, 'sky');
-    this.add.image(400, 300, 'star');}
+var platforms;
+var score = 0;
+var scoreText;
 
-function update ()
+
+
+function create ()
 {
-}
+    this.add.image(400, 300, 'sky');
+
+    platforms = this.physics.add.staticGroup(); //fyzika pro statické tělesa (mají jen velikost a pozici - nehýbou se)
+    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+    platforms.create(600, 400, 'ground');
+    platforms.create(50, 250, 'ground');
+    platforms.create(750, 220, 'ground');
+
+    player = this.physics.add.sprite(100, 450, 'dude'); //hráč nastaven jako dynamické těleso
+
+    player.setBounce(0.2); //mírný odraz
+    player.setCollideWorldBounds(true);
+
+    this.anims.create({ //animace pro běh doleva
+        key: 'left',    
+        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({ //animace pro otočení
+        key: 'turn',
+        frames: [ { key: 'dude', frame: 4 } ],
+        frameRate: 20
+    });
+
+    this.anims.create({ //animace pro běh doprava
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+        frameRate: 10,
+        repeat: -1
+    });
 
 
+    this.physics.add.collider(player, platforms);
+    cursors = this.input.keyboard.createCursorKeys();
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-const playing_field = document.getElementById('playing-field');
-const player = document.getElementById('player');
-const bullet = document.getElementById('bullet');
-const balloon = document.getElementById('balloon');
-const live = document.getElementById('live');
-const score = document.getElementById('score');
-
-
-let playerX = 500;
-let playerY = 600;
-let bulletX;
-let bulletY;
-
-let LivesCounter=3;
-let ScoreCounter=0;
-
-let bulletVisible = false;
-let bulletSpeed = 5;
-let balloonX = 0;
-let balloonSpeed = 1;
-
-
-requestAnimationFrame(BalloonMoving);
-
-function pohyb(event) {
-    bulletX = playerX + 30;
+    stars = this.physics.add.group({
+        key: 'star',
+        repeat: 11,
+        setXY: { x: 12, y: 0, stepX: 70 }
+    });
     
-
-    switch (event.key) {
-        case 'a':
-            playerX -= 10;
-            break;
-        case 'd':
-            playerX += 10;
-            break;
-        case 'ArrowLeft':
-            playerX -= 10;
-            break;
-        case 'ArrowRight':
-            playerX += 10;
-            break;
-        case ' ':
-            if (!bulletVisible) {
-                bulletY = 480;
-                bullet.style.left = bulletX + 'px';
-                bullet.style.top = bulletY + 'px';
-                bullet.style.visibility = 'visible';
-                bulletVisible = true;
-                requestAnimationFrame(BulletMoving);
-            }
-            break;
-    }
-
-    playerX = Math.max(0, Math.min(playerX, playing_field.clientWidth - player.clientWidth));
-    playerY = Math.max(0, Math.min(playerY, playing_field.clientHeight - player.clientHeight));
-
-    player.style.left = playerX + 'px';
-    player.style.top = playerY + 'px';
+    stars.children.iterate(function (child) {
     
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     
+    });
+
+    this.physics.add.collider(stars, platforms);
+    this.physics.add.overlap(player, stars, collectStar, null, this);
+
+
+    function collectStar (player, star){
+        star.disableBody(true, true);
+
+        score += 10;
+        scoreText.setText('Score: ' + score);
+
+        if (stars.countActive(true) === 0)
+        {
+            stars.children.iterate(function (child) {
+
+                child.enableBody(true, child.x, 0, true, true);
+
+            });
+
+            var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+            var bomb = bombs.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+        }
+    }
+
+    bombs = this.physics.add.group();
+    this.physics.add.collider(bombs, platforms);
+    this.physics.add.collider(player, bombs, hitBomb, null, this);
+
+    function hitBomb (player, bomb){
+        this.physics.pause();
+        player.setTint(0xff0000);
+        player.anims.play('turn');
+        gameOver = true;
+    }
+
+    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 }
 
 
-function BulletMoving() {
-    if (bulletVisible) {
-        bulletY -= bulletSpeed;
-        bullet.style.top = bulletY + 'px';
 
-        if (bulletY < 0) {
-            bullet.style.visibility = 'hidden';
-            bulletVisible = false;
-        } else {
-            requestAnimationFrame(BulletMoving);
-            checkCollision();
-        }
+function update (){
+    if (cursors.left.isDown)
+    {
+        player.setVelocityX(-160);
+
+        player.anims.play('left', true);
+    }
+    else if (cursors.right.isDown)
+    {
+        player.setVelocityX(160);
+
+        player.anims.play('right', true);
+    }
+    else
+    {
+        player.setVelocityX(0);
+
+        player.anims.play('turn');
+    }
+
+    if (cursors.up.isDown && player.body.touching.down)
+    {
+        player.setVelocityY(-330);
     }
 }
 
-
-function BalloonMoving() {
-    balloonX += balloonSpeed;
-    balloon.style.left = balloonX + 'px';
-
-    if (balloonX > 732) {
-        balloonX = 0;
-        balloon.style.left = balloonX + 'px';
-        LivesCounter -= 1;
-        switch(LivesCounter){
-            case 2: live.innerHTML = '<img src="live.png"><img src="live.png">'; break;
-            case 1: live.innerHTML = '<img src="live.png">'; break;
-            case 0: live.innerHTML = " "; gameOver(); break;
-        }
-    }
-    if (LivesCounter != 0) {
-        requestAnimationFrame(BalloonMoving);
-    }
-    
-}
-
-
-function checkCollision(){
-    if(LivesCounter != 0){
-        if (bulletY == 80 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
-            balloonX = 0; ScoreCounter += 1;
-            balloonSpeed = balloonSpeed + 0.15;
-        }
-        if (bulletY == 60 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
-            balloonX = 0; ScoreCounter += 1;
-            balloonSpeed = balloonSpeed + 0.15;
-        }
-        if (bulletY == 40 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
-            balloonX = 0; ScoreCounter += 1;
-            balloonSpeed = balloonSpeed + 0.15;
-        }
-        if (bulletY == 20 && bulletX >= balloonX && bulletX <= (balloonX+68)) {
-            balloonX = 0; ScoreCounter += 1;
-            balloonSpeed = balloonSpeed + 0.15;
-        }
-    }
-    score.innerHTML = "<b>Score: " + ScoreCounter + "</b>";
-}
-
-
-function gameOver(){
-    balloon.style.visibility = 'hidden';
-}
-
-
-function resetButton(){
-    if(LivesCounter == 0){
-       balloon.style.visibility = "visible"
-       ScoreCounter = 0;
-       LivesCounter = 3;
-       balloonSpeed = 1;
-       score.innerHTML = "<b>Score: " + ScoreCounter + "</b>";
-       live.innerHTML = '<img src="live.png"><img src="live.png"><img src="live.png">';
-       requestAnimationFrame(BalloonMoving); 
-    }
-    
-}
-
-
-window.addEventListener('keydown', pohyb);
-
-*/
-
-/* HTML!!!
-<h1>Baloon shooting</h1>
-    <div id="live"><img src="live.png"><img src="live.png"><img src="live.png"></div>
-    <div id="score"><b>Score: 0</b></div>
-    <div id="playing-field">
-        <div id="player"></div>
-        <div id="balloon"></div>
-        <div id="bullet"></div>
-    </div>
-    <button id="reset" onClick="resetButton()" class="btn btn-danger">Reset</button>
-*/
