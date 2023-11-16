@@ -1,18 +1,22 @@
-body{
-    background-image: url("background.png");
-}
-
 #playing-field{
     width: 800px;
     height: 600px;
     border: 2px solid black;
-    background-image: url("fieldBackground.jpg");
+    
     
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+
+/*
+body{
+    background-image: url("background.png");
+}
+
+
 #player {
     width: 48px;
     height: 83px;
@@ -61,3 +65,4 @@ h1{
     left: 30%;
     top: 770px;
 }
+*/

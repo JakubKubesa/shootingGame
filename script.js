@@ -1,3 +1,48 @@
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+var game = new Phaser.Game(config);
+
+function preload (){
+    this.load.image('sky', 'assets/sky.png');
+    this.load.image('ground', 'assets/platform.png');
+    this.load.image('star', 'assets/star.png');
+    this.load.image('bomb', 'assets/bomb.png');
+    this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+}
+
+function create (){
+    this.add.image(400, 300, 'sky');
+    this.add.image(400, 300, 'star');}
+
+function update ()
+{
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
 const playing_field = document.getElementById('playing-field');
 const player = document.getElementById('player');
 const bullet = document.getElementById('bullet');
@@ -142,3 +187,16 @@ function resetButton(){
 
 window.addEventListener('keydown', pohyb);
 
+*/
+
+/* HTML!!!
+<h1>Baloon shooting</h1>
+    <div id="live"><img src="live.png"><img src="live.png"><img src="live.png"></div>
+    <div id="score"><b>Score: 0</b></div>
+    <div id="playing-field">
+        <div id="player"></div>
+        <div id="balloon"></div>
+        <div id="bullet"></div>
+    </div>
+    <button id="reset" onClick="resetButton()" class="btn btn-danger">Reset</button>
+*/
